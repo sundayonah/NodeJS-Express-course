@@ -1,26 +1,19 @@
 const express = require("express");
-const logger = require("./logger");
-
 const app = express();
 
-//req => middleware => res
-app.use(logger);
+const peoplesRouter = require("./routes/people");
+const authRouter = require("./routes/auth");
 
-app.get("/", (req, res) => {
-  res.send("Home");
-});
+//static assets
+app.use(express.static("./methods-public"));
 
-app.get("/about", (req, res) => {
-  res.send("About");
-});
+// parse from data
+app.use(express.urlencoded({ extended: false }));
+//parse json
+app.use(express.json());
 
-app.get("/api/products", (req, res) => {
-  res.send("Products");
-});
-
-app.get("/api/items", (req, res) => {
-  res.send("items");
-});
+app.use("/api/people", peoplesRouter);
+app.use("/login", authRouter);
 
 app.listen(3001, () => {
   console.log("Server listening on port 3001");
