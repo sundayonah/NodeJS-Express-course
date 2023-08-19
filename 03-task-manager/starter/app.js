@@ -4,6 +4,8 @@ const tasks = require("./routes/tasks");
 const connectDB = require("./db/connect");
 require("dotenv").config();
 const notFound = require("./middleware/not-found");
+const errorHandleMiddleware = require("./middleware/error-handler");
+
 // middleware
 app.use(express.static("./public"));
 app.use(express.json());
@@ -18,7 +20,9 @@ app.use(notFound);
 // app.patch('/api/v1/tasks/:id')   => update task
 // app.delete('/api/v1/tasks/:id')  => delete single task
 
-const port = 3000;
+app.use(errorHandleMiddleware);
+
+const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
